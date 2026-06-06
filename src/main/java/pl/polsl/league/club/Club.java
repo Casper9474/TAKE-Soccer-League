@@ -10,7 +10,7 @@ import lombok.Setter;
 @Getter @Setter
 public class Club {
 	@Id @GeneratedValue
-	private String id;
+	private Integer id;
 	
 	private String name;
 	private String city;
