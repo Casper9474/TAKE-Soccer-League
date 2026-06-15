@@ -1,5 +1,6 @@
 package pl.polsl.league.goal;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -21,6 +22,7 @@ public class Goal {
 	private Match match;
 	@ManyToOne
 	private Player player;
+	@Column(name = "`minute`")
 	private Integer minute; // Time in seconds = minute/60 : minute % 60
 	
 	@Enumerated(EnumType.STRING)
