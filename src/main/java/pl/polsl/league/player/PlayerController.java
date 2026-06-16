@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import pl.polsl.league.error.ResourceNotFoundException;
+
 @Controller
 @RequestMapping(path = "/player")
 public class PlayerController {
@@ -32,15 +34,15 @@ public class PlayerController {
 	@GetMapping
 	public @ResponseBody CollectionModel<PlayerDTO> getAllPlayers() {
 		List<PlayerDTO> playersDTO = StreamSupport.stream(playerRepository.findAll().spliterator(), false)
-				.map(PlayerDTO::new)
-				.collect(Collectors.toList());
+				.map(PlayerDTO::new).collect(Collectors.toList());
 		return CollectionModel.of(playersDTO);
 	}
 
 	@GetMapping("/{id}")
 	public @ResponseBody PlayerDTO getPlayer(@PathVariable Integer id) {
-		Player player = playerRepository.findById(id).orElse(null);
-		return player != null ? new PlayerDTO(player) : null;
+		Player player = playerRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Record not found with id: " + id));
+		return new PlayerDTO(player);
 	}
 
 	@PutMapping
@@ -51,6 +53,9 @@ public class PlayerController {
 
 	@DeleteMapping("/{id}")
 	public @ResponseBody void deletePlayer(@PathVariable Integer id) {
+		if (!playerRepository.existsById(id)) {
+			throw new ResourceNotFoundException("Record not found with id: " + id);
+		}
 		playerRepository.deleteById(id);
 	}
 }

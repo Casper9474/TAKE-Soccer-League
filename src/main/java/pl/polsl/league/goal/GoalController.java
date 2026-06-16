@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import pl.polsl.league.error.ResourceNotFoundException;
+
 @Controller
 @RequestMapping(path = "/goal")
 public class GoalController {
@@ -31,15 +33,16 @@ public class GoalController {
 
 	@GetMapping
 	public @ResponseBody CollectionModel<GoalDTO> getAllGoals() {
-		List<GoalDTO> goalsDTO = StreamSupport.stream(goalRepository.findAll().spliterator(), false)
-				.map(GoalDTO::new)
+		List<GoalDTO> goalsDTO = StreamSupport.stream(goalRepository.findAll().spliterator(), false).map(GoalDTO::new)
 				.collect(Collectors.toList());
-		return CollectionModel.of(goalsDTO);	}
+		return CollectionModel.of(goalsDTO);
+	}
 
 	@GetMapping("/{id}")
 	public @ResponseBody GoalDTO getGoal(@PathVariable Integer id) {
-		Goal goal = goalRepository.findById(id).orElse(null);
-		return goal != null ? new GoalDTO(goal) : null;
+		Goal goal = goalRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Record not found with id: " + id));
+		return new GoalDTO(goal);
 	}
 
 	@PutMapping
@@ -50,6 +53,9 @@ public class GoalController {
 
 	@DeleteMapping("/{id}")
 	public @ResponseBody void deleteGoal(@PathVariable Integer id) {
+		if (!goalRepository.existsById(id)) {
+			throw new ResourceNotFoundException("Record not found with id: " + id);
+		}
 		goalRepository.deleteById(id);
 	}
 }

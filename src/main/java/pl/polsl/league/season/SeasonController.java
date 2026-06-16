@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import pl.polsl.league.error.ResourceNotFoundException;
+
 @Controller
 @RequestMapping(path = "/season")
 public class SeasonController {
@@ -32,15 +34,15 @@ public class SeasonController {
 	@GetMapping
 	public @ResponseBody CollectionModel<SeasonDTO> getAllSeasons() {
 		List<SeasonDTO> seasonsDTO = StreamSupport.stream(seasonRepository.findAll().spliterator(), false)
-				.map(SeasonDTO::new)
-				.collect(Collectors.toList());
+				.map(SeasonDTO::new).collect(Collectors.toList());
 		return CollectionModel.of(seasonsDTO);
 	}
 
 	@GetMapping("/{id}")
 	public @ResponseBody SeasonDTO getSeason(@PathVariable Integer id) {
-		Season season = seasonRepository.findById(id).orElse(null);
-		return season != null ? new SeasonDTO(season) : null;
+		Season season = seasonRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Record not found with id: " + id));
+		return new SeasonDTO(season);
 	}
 
 	@PutMapping
@@ -51,6 +53,9 @@ public class SeasonController {
 
 	@DeleteMapping("/{id}")
 	public @ResponseBody void deleteSeason(@PathVariable Integer id) {
+		if (!seasonRepository.existsById(id)) {
+			throw new ResourceNotFoundException("Record not found with id: " + id);
+		}
 		seasonRepository.deleteById(id);
 	}
 }

@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import pl.polsl.league.error.ResourceNotFoundException;
+
 @Controller
 @RequestMapping(path = "/match")
 public class MatchController {
@@ -32,15 +34,15 @@ public class MatchController {
 	@GetMapping
 	public @ResponseBody CollectionModel<MatchDTO> getAllMatchs() {
 		List<MatchDTO> matchsDTO = StreamSupport.stream(matchRepository.findAll().spliterator(), false)
-				.map(MatchDTO::new)
-				.collect(Collectors.toList());
+				.map(MatchDTO::new).collect(Collectors.toList());
 		return CollectionModel.of(matchsDTO);
 	}
 
 	@GetMapping("/{id}")
 	public @ResponseBody MatchDTO getMatch(@PathVariable Integer id) {
-		Match match = matchRepository.findById(id).orElse(null);
-		return match != null ? new MatchDTO(match) : null;
+		Match match = matchRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Record not found with id: " + id));
+		return new MatchDTO(match);
 	}
 
 	@PutMapping
@@ -51,6 +53,9 @@ public class MatchController {
 
 	@DeleteMapping("/{id}")
 	public @ResponseBody void deleteMatch(@PathVariable Integer id) {
+		if (!matchRepository.existsById(id)) {
+			throw new ResourceNotFoundException("Record not found with id: " + id);
+		}
 		matchRepository.deleteById(id);
 	}
 }
