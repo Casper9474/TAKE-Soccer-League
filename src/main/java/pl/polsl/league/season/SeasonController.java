@@ -1,6 +1,11 @@
 package pl.polsl.league.season;
 
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,23 +24,29 @@ public class SeasonController {
 	SeasonRepository seasonRepository;
 
 	@PostMapping
-	public @ResponseBody Season addSeason(@RequestBody Season Season) {
-		return seasonRepository.save(Season);
+	public @ResponseBody SeasonDTO addSeason(@RequestBody Season season) {
+		Season savedSeason = seasonRepository.save(season);
+		return new SeasonDTO(savedSeason);
 	}
 
 	@GetMapping
-	public @ResponseBody Iterable<Season> getAllSeasons() {
-		return seasonRepository.findAll();
+	public @ResponseBody CollectionModel<SeasonDTO> getAllSeasons() {
+		List<SeasonDTO> seasonsDTO = StreamSupport.stream(seasonRepository.findAll().spliterator(), false)
+				.map(SeasonDTO::new)
+				.collect(Collectors.toList());
+		return CollectionModel.of(seasonsDTO);
 	}
 
 	@GetMapping("/{id}")
-	public @ResponseBody Season getSeason(@PathVariable Integer id) {
-		return seasonRepository.findById(id).orElse(null);
+	public @ResponseBody SeasonDTO getSeason(@PathVariable Integer id) {
+		Season season = seasonRepository.findById(id).orElse(null);
+		return season != null ? new SeasonDTO(season) : null;
 	}
 
 	@PutMapping
-	public @ResponseBody Season updateSeason(@RequestBody Season season) {
-		return seasonRepository.save(season);
+	public @ResponseBody SeasonDTO updateSeason(@RequestBody Season season) {
+		Season updatedSeason = seasonRepository.save(season);
+		return new SeasonDTO(updatedSeason);
 	}
 
 	@DeleteMapping("/{id}")

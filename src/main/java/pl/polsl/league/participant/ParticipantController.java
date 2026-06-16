@@ -1,6 +1,11 @@
 package pl.polsl.league.participant;
 
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,23 +24,29 @@ public class ParticipantController {
 	ParticipantRepository participantRepository;
 
 	@PostMapping
-	public @ResponseBody Participant addParticipant(@RequestBody Participant Participant) {
-		return participantRepository.save(Participant);
+	public @ResponseBody ParticipantDTO addParticipant(@RequestBody Participant participant) {
+		Participant savedParticipant = participantRepository.save(participant);
+		return new ParticipantDTO(savedParticipant);
 	}
 
 	@GetMapping
-	public @ResponseBody Iterable<Participant> getAllParticipants() {
-		return participantRepository.findAll();
+	public @ResponseBody CollectionModel<ParticipantDTO> getAllParticipants() {
+		List<ParticipantDTO> participantsDTO = StreamSupport.stream(participantRepository.findAll().spliterator(), false)
+				.map(ParticipantDTO::new)
+				.collect(Collectors.toList());
+		return CollectionModel.of(participantsDTO);
 	}
 
 	@GetMapping("/{id}")
-	public @ResponseBody Participant getParticipant(@PathVariable Integer id) {
-		return participantRepository.findById(id).orElse(null);
+	public @ResponseBody ParticipantDTO getParticipant(@PathVariable Integer id) {
+		Participant participant = participantRepository.findById(id).orElse(null);
+		return participant != null ? new ParticipantDTO(participant) : null;
 	}
 
 	@PutMapping
-	public @ResponseBody Participant updateParticipant(@RequestBody Participant participant) {
-		return participantRepository.save(participant);
+	public @ResponseBody ParticipantDTO updateParticipant(@RequestBody Participant participant) {
+		Participant updatedParticipant = participantRepository.save(participant);
+		return new ParticipantDTO(updatedParticipant);
 	}
 
 	@DeleteMapping("/{id}")

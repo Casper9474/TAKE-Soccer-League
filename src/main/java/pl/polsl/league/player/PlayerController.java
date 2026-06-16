@@ -1,6 +1,11 @@
 package pl.polsl.league.player;
 
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,28 +24,33 @@ public class PlayerController {
 	PlayerRepository playerRepository;
 
 	@PostMapping
-	public @ResponseBody Player addPlayer(@RequestBody Player Player) {
-		return playerRepository.save(Player);
+	public @ResponseBody PlayerDTO addPlayer(@RequestBody Player player) {
+		Player savedPlayer = playerRepository.save(player);
+		return new PlayerDTO(savedPlayer);
 	}
 
 	@GetMapping
-	public @ResponseBody Iterable<Player> getAllPlayers() {
-		return playerRepository.findAll();
+	public @ResponseBody CollectionModel<PlayerDTO> getAllPlayers() {
+		List<PlayerDTO> playersDTO = StreamSupport.stream(playerRepository.findAll().spliterator(), false)
+				.map(PlayerDTO::new)
+				.collect(Collectors.toList());
+		return CollectionModel.of(playersDTO);
 	}
 
 	@GetMapping("/{id}")
-	public @ResponseBody Player getPlayer(@PathVariable Integer id) {
-		return playerRepository.findById(id).orElse(null);
+	public @ResponseBody PlayerDTO getPlayer(@PathVariable Integer id) {
+		Player player = playerRepository.findById(id).orElse(null);
+		return player != null ? new PlayerDTO(player) : null;
 	}
 
 	@PutMapping
-	public @ResponseBody Player updatePlayer(@RequestBody Player player) {
-		return playerRepository.save(player);
+	public @ResponseBody PlayerDTO updatePlayer(@RequestBody Player player) {
+		Player updatedPlayer = playerRepository.save(player);
+		return new PlayerDTO(updatedPlayer);
 	}
 
 	@DeleteMapping("/{id}")
 	public @ResponseBody void deletePlayer(@PathVariable Integer id) {
 		playerRepository.deleteById(id);
 	}
-
 }

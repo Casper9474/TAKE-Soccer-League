@@ -1,6 +1,11 @@
 package pl.polsl.league.goal;
 
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,23 +24,28 @@ public class GoalController {
 	GoalRepository goalRepository;
 
 	@PostMapping
-	public @ResponseBody Goal addGoal(@RequestBody Goal Goal) {
-		return goalRepository.save(Goal);
+	public @ResponseBody GoalDTO addGoal(@RequestBody Goal goal) {
+		Goal savedGoal = goalRepository.save(goal);
+		return new GoalDTO(savedGoal);
 	}
 
 	@GetMapping
-	public @ResponseBody Iterable<Goal> getAllGoals() {
-		return goalRepository.findAll();
-	}
+	public @ResponseBody CollectionModel<GoalDTO> getAllGoals() {
+		List<GoalDTO> goalsDTO = StreamSupport.stream(goalRepository.findAll().spliterator(), false)
+				.map(GoalDTO::new)
+				.collect(Collectors.toList());
+		return CollectionModel.of(goalsDTO);	}
 
 	@GetMapping("/{id}")
-	public @ResponseBody Goal getGoal(@PathVariable Integer id) {
-		return goalRepository.findById(id).orElse(null);
+	public @ResponseBody GoalDTO getGoal(@PathVariable Integer id) {
+		Goal goal = goalRepository.findById(id).orElse(null);
+		return goal != null ? new GoalDTO(goal) : null;
 	}
 
 	@PutMapping
-	public @ResponseBody Goal updateGoal(@RequestBody Goal goal) {
-		return goalRepository.save(goal);
+	public @ResponseBody GoalDTO updateGoal(@RequestBody Goal goal) {
+		Goal updatedGoal = goalRepository.save(goal);
+		return new GoalDTO(updatedGoal);
 	}
 
 	@DeleteMapping("/{id}")

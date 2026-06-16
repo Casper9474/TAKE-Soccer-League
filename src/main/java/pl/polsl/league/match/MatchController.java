@@ -1,6 +1,11 @@
 package pl.polsl.league.match;
 
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,28 +24,33 @@ public class MatchController {
 	MatchRepository matchRepository;
 
 	@PostMapping
-	public @ResponseBody Match addMatch(@RequestBody Match Match) {
-		return matchRepository.save(Match);
+	public @ResponseBody MatchDTO addMatch(@RequestBody Match match) {
+		Match savedMatch = matchRepository.save(match);
+		return new MatchDTO(savedMatch);
 	}
 
 	@GetMapping
-	public @ResponseBody Iterable<Match> getAllMatchs() {
-		return matchRepository.findAll();
+	public @ResponseBody CollectionModel<MatchDTO> getAllMatchs() {
+		List<MatchDTO> matchsDTO = StreamSupport.stream(matchRepository.findAll().spliterator(), false)
+				.map(MatchDTO::new)
+				.collect(Collectors.toList());
+		return CollectionModel.of(matchsDTO);
 	}
 
 	@GetMapping("/{id}")
-	public @ResponseBody Match getMatch(@PathVariable Integer id) {
-		return matchRepository.findById(id).orElse(null);
+	public @ResponseBody MatchDTO getMatch(@PathVariable Integer id) {
+		Match match = matchRepository.findById(id).orElse(null);
+		return match != null ? new MatchDTO(match) : null;
 	}
 
 	@PutMapping
-	public @ResponseBody Match updateMatch(@RequestBody Match match) {
-		return matchRepository.save(match);
+	public @ResponseBody MatchDTO updateMatch(@RequestBody Match match) {
+		Match updatedMatch = matchRepository.save(match);
+		return new MatchDTO(updatedMatch);
 	}
 
 	@DeleteMapping("/{id}")
 	public @ResponseBody void deleteMatch(@PathVariable Integer id) {
 		matchRepository.deleteById(id);
 	}
-
 }
