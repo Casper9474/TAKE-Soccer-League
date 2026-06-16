@@ -1,0 +1,22 @@
+info:
+  name: walkover
+  type: http
+  seq: 7
+
+http:
+  method: POST
+  url: http://localhost:8080/match/:id/walkover
+  params:
+    - name: id
+      value: "1"
+      type: path
+    - name: homeWins
+      value: "true"
+      type: query
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

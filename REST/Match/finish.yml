@@ -1,0 +1,19 @@
+info:
+  name: finish
+  type: http
+  seq: 6
+
+http:
+  method: POST
+  url: http://localhost:8080/match/:id/finish
+  params:
+    - name: id
+      value: "1"
+      type: path
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
