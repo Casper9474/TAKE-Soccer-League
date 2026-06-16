@@ -25,6 +25,16 @@ public class GoalController {
 	@Autowired
 	GoalRepository goalRepository;
 
+	@GetMapping("/top-scorers/{seasonId}")
+	public @ResponseBody List<Object[]> getTopScorers(@PathVariable Integer seasonId) {
+		return goalRepository.getTopScorers(seasonId);
+	}
+
+	@GetMapping("/distribution")
+	public @ResponseBody List<Object[]> getGoalDistribution() {
+		return goalRepository.getGoalTimeDistribution();
+	}
+
 	@PostMapping
 	public @ResponseBody GoalDTO addGoal(@RequestBody Goal goal) {
 		Goal savedGoal = goalRepository.save(goal);

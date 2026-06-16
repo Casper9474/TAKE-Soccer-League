@@ -24,6 +24,14 @@ public class ParticipantController {
 
 	@Autowired
 	ParticipantRepository participantRepository;
+	
+	@GetMapping("/league-table/{seasonId}")
+	public @ResponseBody CollectionModel<ParticipantDTO> getLeagueTable(@PathVariable Integer seasonId) {
+	    List<ParticipantDTO> participantsDTO = participantRepository.findBySeasonIdOrderByPointsDesc(seasonId).stream()
+	            .map(ParticipantDTO::new)
+	            .collect(Collectors.toList());
+	    return CollectionModel.of(participantsDTO);
+	}
 
 	@PostMapping
 	public @ResponseBody ParticipantDTO addParticipant(@RequestBody Participant participant) {
