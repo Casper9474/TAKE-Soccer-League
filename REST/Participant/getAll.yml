@@ -1,15 +1,11 @@
 info:
-  name: get
+  name: getAll
   type: http
-  seq: 3
+  seq: 2
 
 http:
   method: GET
-  url: http://localhost:8080/club/:id
-  params:
-    - name: id
-      value: "4"
-      type: path
+  url: http://localhost:8080/participant
   auth: inherit
 
 settings:

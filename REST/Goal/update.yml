@@ -1,0 +1,25 @@
+info:
+  name: update
+  type: http
+  seq: 4
+
+http:
+  method: PUT
+  url: http://localhost:8080/goal
+  body:
+    type: json
+    data: |-
+      {
+        "id": 1,
+        "match": { "id": 1 },
+        "player": { "id": 3 },
+        "minute": 15,
+        "goalType": "PENALTY"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

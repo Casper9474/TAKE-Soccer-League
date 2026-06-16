@@ -1,0 +1,29 @@
+info:
+  name: update
+  type: http
+  seq: 4
+
+http:
+  method: PUT
+  url: http://localhost:8080/match
+  body:
+    type: json
+    data: |-
+      {
+        "id": 1,
+        "season": { "id": 1 },
+        "homeClub": { "id": 2 },
+        "awayClub": { "id": 1 },
+        "matchDate": "2025-10-26T21:00:00",
+        "matchWeek": 11,
+        "homeScore": 3,
+        "awayScore": 2,
+        "status": "HOMEWIN"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

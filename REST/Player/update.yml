@@ -1,0 +1,27 @@
+info:
+  name: update
+  type: http
+  seq: 4
+
+http:
+  method: PUT
+  url: http://localhost:8080/player
+  body:
+    type: json
+    data: |-
+      {
+        "id": 1,
+        "club": { "id": 1 },
+        "firstName": "Kylian",
+        "lastName": "Mbappé",
+        "number": 10,
+        "birthDate": "1998-12-20",
+        "position": "FORWARD"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

@@ -5,10 +5,10 @@ info:
 
 http:
   method: GET
-  url: http://localhost:8080/club/:id
+  url: http://localhost:8080/participant/:id
   params:
     - name: id
-      value: "4"
+      value: "1"
       type: path
   auth: inherit
 

@@ -1,0 +1,26 @@
+info:
+  name: add
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: http://localhost:8080/player
+  body:
+    type: json
+    data: |-
+      {
+        "club": { "id": 1 },
+        "firstName": "Vinícius",
+        "lastName": "Júnior",
+        "number": 7,
+        "birthDate": "2000-07-12",
+        "position": "FORWARD"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

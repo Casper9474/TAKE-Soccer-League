@@ -1,10 +1,10 @@
 info:
-  name: get
+  name: delete
   type: http
-  seq: 3
+  seq: 5
 
 http:
-  method: GET
+  method: DELETE
   url: http://localhost:8080/club/:id
   params:
     - name: id

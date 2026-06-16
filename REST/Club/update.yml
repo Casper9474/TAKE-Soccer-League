@@ -1,0 +1,25 @@
+info:
+  name: update
+  type: http
+  seq: 4
+
+http:
+  method: PUT
+  url: http://localhost:8080/club
+  body:
+    type: json
+    data: |-
+      {
+        "id": 1,
+        "name": "Real Madrid",
+        "city": "Madrid",
+        "foundedYear": 2000,
+        "stadiumName": "Benz"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

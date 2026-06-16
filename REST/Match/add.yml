@@ -1,0 +1,28 @@
+info:
+  name: add
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: http://localhost:8080/match
+  body:
+    type: json
+    data: |-
+      {
+        "season": { "id": 2 },
+        "homeClub": { "id": 1 },
+        "awayClub": { "id": 2 },
+        "matchDate": "2026-10-26T21:00:00",
+        "matchWeek": 1,
+        "homeScore": 0,
+        "awayScore": 0,
+        "status": "DRAW"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
