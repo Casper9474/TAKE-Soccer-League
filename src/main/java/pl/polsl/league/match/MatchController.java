@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import pl.polsl.league.error.ResourceNotFoundException;
 import pl.polsl.league.goal.GoalRepository;
 import pl.polsl.league.participant.Participant;
@@ -111,7 +112,7 @@ public class MatchController {
 	}
 
 	@PostMapping
-	public @ResponseBody MatchDTO addMatch(@RequestBody Match match) {
+	public @ResponseBody MatchDTO addMatch(@Valid @RequestBody Match match) {
 		Match savedMatch = matchRepository.save(match);
 		return new MatchDTO(savedMatch);
 	}
@@ -131,7 +132,7 @@ public class MatchController {
 	}
 
 	@PutMapping("/{id}")
-	public @ResponseBody MatchDTO updateMatch(@PathVariable Integer id, @RequestBody Match match) {
+	public @ResponseBody MatchDTO updateMatch(@PathVariable Integer id, @Valid @RequestBody Match match) {
 		if (!matchRepository.existsById(id)) {
 			throw new ResourceNotFoundException("Record not found with id: " + id);
 		}

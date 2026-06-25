@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import jakarta.validation.Valid;
 import pl.polsl.league.error.ResourceNotFoundException;
 
 @Controller
@@ -34,7 +35,7 @@ public class ParticipantController {
 	}
 
 	@PostMapping
-	public @ResponseBody ParticipantDTO addParticipant(@RequestBody Participant participant) {
+	public @ResponseBody ParticipantDTO addParticipant(@Valid @RequestBody Participant participant) {
 		Participant savedParticipant = participantRepository.save(participant);
 		return new ParticipantDTO(savedParticipant);
 	}
@@ -55,7 +56,7 @@ public class ParticipantController {
 	}
 
 	@PutMapping("/{id}")
-	public @ResponseBody ParticipantDTO updateParticipant(@PathVariable Integer id, @RequestBody Participant participant) {
+	public @ResponseBody ParticipantDTO updateParticipant(@PathVariable Integer id, @Valid @RequestBody Participant participant) {
 		if (!participantRepository.existsById(id)) {
 			throw new ResourceNotFoundException("Record not found with id: " + id);
 		}

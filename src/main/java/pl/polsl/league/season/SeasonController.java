@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import jakarta.validation.Valid;
 import pl.polsl.league.error.ResourceNotFoundException;
 
 @Controller
@@ -26,7 +27,7 @@ public class SeasonController {
 	SeasonRepository seasonRepository;
 
 	@PostMapping
-	public @ResponseBody SeasonDTO addSeason(@RequestBody Season season) {
+	public @ResponseBody SeasonDTO addSeason(@Valid @RequestBody Season season) {
 		Season savedSeason = seasonRepository.save(season);
 		return new SeasonDTO(savedSeason);
 	}
@@ -46,7 +47,7 @@ public class SeasonController {
 	}
 
 	@PutMapping("/{id}")
-	public @ResponseBody SeasonDTO updateSeason(@PathVariable Integer id, @RequestBody Season season) {
+	public @ResponseBody SeasonDTO updateSeason(@PathVariable Integer id, @Valid @RequestBody Season season) {
 		if (!seasonRepository.existsById(id)) {
 			throw new ResourceNotFoundException("Record not found with id: " + id);
 		}

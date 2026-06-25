@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import jakarta.validation.Valid;
 import pl.polsl.league.error.ResourceNotFoundException;
 
 @Controller
@@ -26,7 +27,7 @@ public class ClubController {
 	ClubRepository clubRepository;
 
 	@PostMapping
-	public @ResponseBody ClubDTO addClub(@RequestBody Club club) {
+	public @ResponseBody ClubDTO addClub(@Valid @RequestBody Club club) {
 		Club savedClub = clubRepository.save(club);
 		return new ClubDTO(savedClub);
 	}
@@ -46,7 +47,7 @@ public class ClubController {
 	}
 
 	@PutMapping("/{id}")
-	public @ResponseBody ClubDTO updateClub(@PathVariable Integer id, @RequestBody Club club) {
+	public @ResponseBody ClubDTO updateClub(@PathVariable Integer id, @Valid @RequestBody Club club) {
 		if (!clubRepository.existsById(id)) {
 			throw new ResourceNotFoundException("Record not found with id: " + id);
 		}

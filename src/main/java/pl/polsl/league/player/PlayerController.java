@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import jakarta.validation.Valid;
 import pl.polsl.league.error.ResourceNotFoundException;
 
 @Controller
@@ -26,7 +27,7 @@ public class PlayerController {
 	PlayerRepository playerRepository;
 
 	@PostMapping
-	public @ResponseBody PlayerDTO addPlayer(@RequestBody Player player) {
+	public @ResponseBody PlayerDTO addPlayer(@Valid @RequestBody Player player) {
 		Player savedPlayer = playerRepository.save(player);
 		return new PlayerDTO(savedPlayer);
 	}
@@ -46,7 +47,7 @@ public class PlayerController {
 	}
 
 	@PutMapping("/{id}")
-	public @ResponseBody PlayerDTO updatePlayer(@PathVariable Integer id, @RequestBody Player player) {
+	public @ResponseBody PlayerDTO updatePlayer(@PathVariable Integer id, @Valid @RequestBody Player player) {
 		if (!playerRepository.existsById(id)) {
 			throw new ResourceNotFoundException("Record not found with id: " + id);
 		}

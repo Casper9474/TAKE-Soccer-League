@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import jakarta.validation.Valid;
 import pl.polsl.league.error.ResourceNotFoundException;
 
 @Controller
@@ -36,7 +37,7 @@ public class GoalController {
 	}
 
 	@PostMapping
-	public @ResponseBody GoalDTO addGoal(@RequestBody Goal goal) {
+	public @ResponseBody GoalDTO addGoal(@Valid @RequestBody Goal goal) {
 		Goal savedGoal = goalRepository.save(goal);
 		return new GoalDTO(savedGoal);
 	}
@@ -56,7 +57,7 @@ public class GoalController {
 	}
 
 	@PutMapping("/{id}")
-	public @ResponseBody GoalDTO updateGoal(@PathVariable Integer id, @RequestBody Goal goal) {
+	public @ResponseBody GoalDTO updateGoal(@PathVariable Integer id, @Valid @RequestBody Goal goal) {
 		if (!goalRepository.existsById(id)) {
 			throw new ResourceNotFoundException("Record not found with id: " + id);
 		}
