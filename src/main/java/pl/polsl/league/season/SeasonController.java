@@ -45,8 +45,12 @@ public class SeasonController {
 		return new SeasonDTO(season);
 	}
 
-	@PutMapping
-	public @ResponseBody SeasonDTO updateSeason(@RequestBody Season season) {
+	@PutMapping("/{id}")
+	public @ResponseBody SeasonDTO updateSeason(@PathVariable Integer id, @RequestBody Season season) {
+		if (!seasonRepository.existsById(id)) {
+			throw new ResourceNotFoundException("Record not found with id: " + id);
+		}
+		season.setId(id);
 		Season updatedSeason = seasonRepository.save(season);
 		return new SeasonDTO(updatedSeason);
 	}

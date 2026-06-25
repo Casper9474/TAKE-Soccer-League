@@ -55,8 +55,12 @@ public class GoalController {
 		return new GoalDTO(goal);
 	}
 
-	@PutMapping
-	public @ResponseBody GoalDTO updateGoal(@RequestBody Goal goal) {
+	@PutMapping("/{id}")
+	public @ResponseBody GoalDTO updateGoal(@PathVariable Integer id, @RequestBody Goal goal) {
+		if (!goalRepository.existsById(id)) {
+			throw new ResourceNotFoundException("Record not found with id: " + id);
+		}
+		goal.setId(id);
 		Goal updatedGoal = goalRepository.save(goal);
 		return new GoalDTO(updatedGoal);
 	}

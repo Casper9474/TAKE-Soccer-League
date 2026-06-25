@@ -5,17 +5,20 @@ info:
 
 http:
   method: PUT
-  url: http://localhost:8080/season
+  url: http://localhost:8080/season/:id
   body:
     type: json
     data: |-
       {
-        "id": 1,
         "name": "La Liga 2025/2026 - Updated",
         "startDate": "2025-08-15",
         "endDate": "2026-05-24",
         "isActive": true
       }
+  params:
+    - name: id
+      value: "1"
+      type: path
   auth: inherit
 
 settings:

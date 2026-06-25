@@ -5,17 +5,20 @@ info:
 
 http:
   method: PUT
-  url: http://localhost:8080/club
+  url: http://localhost:8080/club/:id
   body:
     type: json
     data: |-
       {
-        "id": 1,
         "name": "Real Madrid",
         "city": "Madrid",
         "foundedYear": 2000,
         "stadiumName": "Benz"
       }
+  params:
+    - name: id
+      value: "1"
+      type: path
   auth: inherit
 
 settings:

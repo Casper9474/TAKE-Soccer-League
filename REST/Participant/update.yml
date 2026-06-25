@@ -5,16 +5,19 @@ info:
 
 http:
   method: PUT
-  url: http://localhost:8080/participant
+  url: http://localhost:8080/participant/:id
   body:
     type: json
     data: |-
       {
-        "id": 1,
         "season": { "id": 1 },
         "club": { "id": 1 },
         "points": 89
       }
+  params:
+    - name: id
+      value: "1"
+      type: path
   auth: inherit
 
 settings:

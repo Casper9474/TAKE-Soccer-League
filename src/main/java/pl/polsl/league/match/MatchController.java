@@ -130,8 +130,12 @@ public class MatchController {
 		return new MatchDTO(match);
 	}
 
-	@PutMapping
-	public @ResponseBody MatchDTO updateMatch(@RequestBody Match match) {
+	@PutMapping("/{id}")
+	public @ResponseBody MatchDTO updateMatch(@PathVariable Integer id, @RequestBody Match match) {
+		if (!matchRepository.existsById(id)) {
+			throw new ResourceNotFoundException("Record not found with id: " + id);
+		}
+		match.setId(id);
 		Match updatedMatch = matchRepository.save(match);
 		return new MatchDTO(updatedMatch);
 	}

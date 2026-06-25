@@ -45,8 +45,12 @@ public class ClubController {
 		return new ClubDTO(club);
 	}
 
-	@PutMapping
-	public @ResponseBody ClubDTO updateClub(@RequestBody Club club) {
+	@PutMapping("/{id}")
+	public @ResponseBody ClubDTO updateClub(@PathVariable Integer id, @RequestBody Club club) {
+		if (!clubRepository.existsById(id)) {
+			throw new ResourceNotFoundException("Record not found with id: " + id);
+		}
+		club.setId(id);
 		Club updatedClub = clubRepository.save(club);
 		return new ClubDTO(updatedClub);
 	}

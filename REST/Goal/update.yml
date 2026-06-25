@@ -5,17 +5,20 @@ info:
 
 http:
   method: PUT
-  url: http://localhost:8080/goal
+  url: http://localhost:8080/goal/:id
   body:
     type: json
     data: |-
       {
-        "id": 1,
         "match": { "id": 1 },
         "player": { "id": 3 },
         "minute": 15,
         "goalType": "PENALTY"
       }
+  params:
+    - name: id
+      value: "1"
+      type: path
   auth: inherit
 
 settings:

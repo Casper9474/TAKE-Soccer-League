@@ -54,8 +54,12 @@ public class ParticipantController {
 		return new ParticipantDTO(participant);
 	}
 
-	@PutMapping
-	public @ResponseBody ParticipantDTO updateParticipant(@RequestBody Participant participant) {
+	@PutMapping("/{id}")
+	public @ResponseBody ParticipantDTO updateParticipant(@PathVariable Integer id, @RequestBody Participant participant) {
+		if (!participantRepository.existsById(id)) {
+			throw new ResourceNotFoundException("Record not found with id: " + id);
+		}
+		participant.setId(id);
 		Participant updatedParticipant = participantRepository.save(participant);
 		return new ParticipantDTO(updatedParticipant);
 	}

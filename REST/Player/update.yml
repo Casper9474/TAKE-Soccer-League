@@ -5,12 +5,11 @@ info:
 
 http:
   method: PUT
-  url: http://localhost:8080/player
+  url: http://localhost:8080/player/:id
   body:
     type: json
     data: |-
       {
-        "id": 1,
         "club": { "id": 1 },
         "firstName": "Kylian",
         "lastName": "Mbappé",
@@ -18,6 +17,10 @@ http:
         "birthDate": "1998-12-20",
         "position": "FORWARD"
       }
+  params:
+    - name: id
+      value: "1"
+      type: path
   auth: inherit
 
 settings:

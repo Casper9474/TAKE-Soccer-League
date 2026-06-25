@@ -5,12 +5,11 @@ info:
 
 http:
   method: PUT
-  url: http://localhost:8080/match
+  url: http://localhost:8080/match/:id
   body:
     type: json
     data: |-
       {
-        "id": 1,
         "season": { "id": 1 },
         "homeClub": { "id": 2 },
         "awayClub": { "id": 1 },
@@ -20,6 +19,10 @@ http:
         "awayScore": 2,
         "status": "HOMEWIN"
       }
+  params:
+    - name: id
+      value: "1"
+      type: path
   auth: inherit
 
 settings:

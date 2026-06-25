@@ -45,8 +45,12 @@ public class PlayerController {
 		return new PlayerDTO(player);
 	}
 
-	@PutMapping
-	public @ResponseBody PlayerDTO updatePlayer(@RequestBody Player player) {
+	@PutMapping("/{id}")
+	public @ResponseBody PlayerDTO updatePlayer(@PathVariable Integer id, @RequestBody Player player) {
+		if (!playerRepository.existsById(id)) {
+			throw new ResourceNotFoundException("Record not found with id: " + id);
+		}
+		player.setId(id);
 		Player updatedPlayer = playerRepository.save(player);
 		return new PlayerDTO(updatedPlayer);
 	}
